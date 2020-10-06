@@ -1,8 +1,8 @@
 Compiling: 
-parent\ChatApp> javac ChatClient.java
-parent\ChatApp> javac ChatServer.java ClientConnectionData.java
+parent\ChatApp> javac ChatClient.java ServerListener.java
+parent\ChatApp> javac ChatServer.java ClientConnectionData.java ClientHandler.java
 
 Running:
 parent\ChatApp> cd ..
-\parent> java ChatApp.ChatClient
+\parent> java ChatApp.ChatServer
 \parent> java ChatApp.ChatClient

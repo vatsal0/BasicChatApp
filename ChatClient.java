@@ -25,19 +25,32 @@ public class ChatClient {
         out = new PrintWriter(socket.getOutputStream(), true);
 
         // start a thread to listen for server messages
-        ServerListener listener = new ServerListener();
+        ServerListener listener = new ServerListener(socketIn);
         Thread t = new Thread(listener);
         t.start();
 
-        System.out.print("Chat sessions has started - enter a user name: ");
-        String name = userInput.nextLine().trim();
-        out.println(name); //out.flush();
+        System.out.print("Entering chat...");
 
         String line = userInput.nextLine().trim();
         while(!line.toLowerCase().startsWith("/quit")) {
-            String msg = String.format("CHAT %s", line); 
-            out.println(msg);
-            line = userInput.nextLine().trim();
+            if (listener.state == 1) {
+                String msg = String.format("NAME %s", line); 
+                out.println(msg);
+                line = userInput.nextLine().trim();
+            } else if (listener.state == 2) {
+                if (line.startsWith("@")) {
+                    String[] contents = line.substring(1).trim().split(" ", 2);
+                    if (contents.length > 1) {
+                        String msg = String.format("PCHAT %s %s", contents[0], contents[1]); 
+                        out.println(msg);
+                        line = userInput.nextLine().trim();
+                    }
+                } else {
+                    String msg = String.format("CHAT %s", line); 
+                    out.println(msg);
+                    line = userInput.nextLine().trim();
+                }
+            }
         }
         out.println("QUIT");
         out.close();
@@ -45,27 +58,5 @@ public class ChatClient {
         socketIn.close();
         socket.close();
         
-    }
-
-    static class ServerListener implements Runnable {
-
-        @Override
-        public void run() {
-            try {
-                String incoming = "";
-
-                while( (incoming = socketIn.readLine()) != null) {
-                    //handle different headers
-                    //WELCOME
-                    //CHAT
-                    //EXIT
-                    System.out.println(incoming);
-                }
-            } catch (Exception ex) {
-                System.out.println("Exception caught in listener - " + ex);
-            } finally{
-                System.out.println("Client Listener exiting");
-            }
-        }
     }
 }
