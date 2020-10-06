@@ -84,10 +84,17 @@ public class ServerListener implements Runnable {
                     String name = incoming.substring(4).trim();
                     System.out.println(String.format("%s has left the chat.", name));
                 } else if (incoming.startsWith("CHAT")) {
+<<<<<<< HEAD
                     String[] contents = incoming.split(" ", 3);
                     System.out.println(String.format("%s @ %s: %s", contents[1].trim(), formatter.format(date), contents[2].trim()));
                 } else if (incoming.startsWith("PCHAT")) {
                     String[] contents = incoming.split(" ", 3);
+=======
+                    String[] contents = incoming.split(" ", 2);
+                    System.out.println(String.format("%s @ %s: %s", contents[1].trim(), formatter.format(date), contents[2].trim()));
+                } else if (incoming.startsWith("PCHAT")) {
+                    String[] contents = incoming.split(" ", 2);
+>>>>>>> dc0104604bec3f11f52d7b3e493b155218f149da
                     System.out.println(String.format("\u0007%s [privately] @ %s: %s", contents[1].trim(), formatter.format(date), contents[2].trim()));
                 } else {
                     System.out.println(incoming);
