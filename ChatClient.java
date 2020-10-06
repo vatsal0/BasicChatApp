@@ -1,5 +1,3 @@
-package ChatApp;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -38,9 +36,18 @@ public class ChatClient {
                 out.println(msg);
                 line = userInput.nextLine().trim();
             } else if (listener.state == 2) {
-                String msg = String.format("CHAT %s", line); 
-                out.println(msg);
-                line = userInput.nextLine().trim();
+                if (line.startsWith("@")) {
+                    String[] contents = line.substring(1).trim().split(" ");
+                    if (contents.length > 1) {
+                        String msg = String.format("PCHAT %s %s", contents[0], contents[1]); 
+                        out.println(msg);
+                        line = userInput.nextLine().trim();
+                    }
+                } else {
+                    String msg = String.format("CHAT %s", line); 
+                    out.println(msg);
+                    line = userInput.nextLine().trim();
+                }
             }
         }
         out.println("QUIT");

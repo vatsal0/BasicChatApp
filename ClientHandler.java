@@ -1,5 +1,3 @@
-package ChatApp;
-
 import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -45,6 +43,20 @@ public class ClientHandler implements Runnable {
             synchronized (clientList) {
                 for (ClientConnectionData c : clientList){
                     if (c.getName() == name) c.getOut().println(msg);
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("broadcast caught exception: " + ex);
+            ex.printStackTrace();
+        }
+    }
+
+    public void broadcastAllButOne(String msg, String name) {
+        try {
+            System.out.println("Broadcasting -- " + msg);
+            synchronized (clientList) {
+                for (ClientConnectionData c : clientList){
+                    if (c.getName() != name) c.getOut().println(msg);
                 }
             }
         } catch (Exception ex) {

@@ -1,5 +1,3 @@
-package ChatApp;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -80,9 +78,15 @@ public class ServerListener implements Runnable {
                 } else if (incoming.startsWith("WELCOME")) {
                     String name = incoming.substring(7).trim();
                     System.out.println(String.format(WelcomeMessages[rand.nextInt(WelcomeMessages.length)], name));
+                } else if (incoming.startsWith("EXIT")) {
+                    String name = incoming.substring(4).trim();
+                    System.out.println(String.format("%s has left the chat.", name));
                 } else if (incoming.startsWith("CHAT")) {
                     String[] contents = incoming.split(" ");
                     System.out.println(String.format("%s @ %s: %s", contents[1].trim(), formatter.format(date), contents[2].trim()));
+                } else if (incoming.startsWith("PCHAT")) {
+                    String[] contents = incoming.split(" ");
+                    System.out.println(String.format("\u0007%s [privately] @ %s: %s", contents[1].trim(), formatter.format(date), contents[2].trim()));
                 } else {
                     System.out.println(incoming);
                 }
