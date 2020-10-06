@@ -1,9 +1,13 @@
+package ChatApp;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.Random;
+import java.text.SimpleDateFormat;  
+import java.util.Date;  
 
 public class ServerListener implements Runnable {
     private static BufferedReader socketIn;
@@ -51,6 +55,8 @@ public class ServerListener implements Runnable {
         "Roses are red, violets are blue, %s joined this server with you"
     };
     private Random rand = new Random();
+    SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");  
+    Date date = new Date();  
 
     public ServerListener(BufferedReader socketIn) {
         this.socketIn = socketIn;
@@ -67,10 +73,14 @@ public class ServerListener implements Runnable {
                     System.out.println("Welcome to the chat! Please enter a username:");
                 } else if (incoming.startsWith("RESUBMITNAME")) {
                     System.out.println("Invalid username! Must be alphanumeric and have at least one character. Enter username:");
+                } else if (incoming.startsWith("CONFIRMNAME")) {
+                    state = 2;
                 } else if (incoming.startsWith("WELCOME")) {
                     String name = incoming.substring(7).trim();
                     System.out.println(String.format(WelcomeMessages[rand.nextInt(WelcomeMessages.length)], name));
-
+                } else if (incoming.startsWith("CHAT")) {
+                    String[] contents = incoming.split(" ");
+                    System.out.println(String.format("%s @ %s: %s", contents[1].trim(), formatter.format(date), contents[2].trim()));
                 } else {
                     System.out.println(incoming);
                 }
