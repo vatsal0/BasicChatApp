@@ -1,5 +1,3 @@
-package ChatApp;
-
 import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,11 +9,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Random;
 
 public class ClientHandler implements Runnable {
     // Maintain data about the client serviced by this thread
     ClientConnectionData client;
     public static final ArrayList<ClientConnectionData> clientList = new ArrayList<>();
+    private Random rand = new Random();
 
     public ClientHandler(ClientConnectionData client) {
         this.client = client;
@@ -57,9 +57,14 @@ public class ClientHandler implements Runnable {
         try {
             System.out.println("Broadcasting -- " + msg);
             synchronized (clientList) {
-                for (ClientConnectionData c : clientList){
-                    if (c.getUserName().equals(name)) c.getOut().println(msg);
+                if (name.equals(".")) {
+                    (clientList.get(rand.nextInt(clientList.size()))).getOut().println(msg);
+                } else {
+                    for (ClientConnectionData c : clientList){
+                        if (c.getUserName().equals(name)) c.getOut().println(msg);
+                    }
                 }
+                
             }
         } catch (Exception ex) {
             System.out.println("broadcast caught exception: " + ex);
@@ -132,7 +137,7 @@ public class ClientHandler implements Runnable {
                     }
                 } else if (incoming.startsWith("PCHAT")) {
                     String[] contents = incoming.substring(5).trim().split(" ", 2);
-                    if (contents[1].length() > 0 and !contents[0].equals(client.getUserName())) {
+                    if (contents[1].length() > 0 && !contents[0].equals(client.getUserName())) {
                         String msg = String.format("PCHAT %s %s", client.getUserName(), contents[1]);
                         broadcastToUsername(msg, contents[0]);    
                     }
