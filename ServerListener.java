@@ -73,6 +73,8 @@ public class ServerListener implements Runnable {
                     System.out.println("Welcome to the chat! Please enter a username:");
                 } else if (incoming.startsWith("RESUBMITNAME")) {
                     System.out.println("Invalid username! Must be alphanumeric and have at least one character. Enter username:");
+                } else if (incoming.startsWith("DIFFERENTNAME")) {
+                    System.out.println("Username is already in use!. Enter another username:");
                 } else if (incoming.startsWith("CONFIRMNAME")) {
                     state = 2;
                 } else if (incoming.startsWith("WELCOME")) {

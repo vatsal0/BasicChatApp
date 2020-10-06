@@ -77,7 +77,15 @@ public class ClientHandler implements Runnable {
                         }
                     }
                 }
-                if (!validated) broadcastOne("RESUBMITNAME", client.getName());
+                if (!validated) {
+                    broadcastOne("RESUBMITNAME", client.getName());
+                } else {
+                    for (ClientConnectionData c : clientList) {
+                        System.out.println(c.getUserName());
+                        validated = validated && !username.equals(c.getUserName());
+                    }
+                    if (!validated) broadcastOne("DIFFERENTNAME", client.getName());
+                }
             }
 
             client.setUserName(username);
