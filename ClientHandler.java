@@ -1,5 +1,3 @@
-package ChatApp;
-
 import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -126,6 +124,13 @@ public class ClientHandler implements Runnable {
             }
 
             client.setUserName(username);
+            String namesList = "";
+            synchronized (clientList) {
+                for (ClientConnectionData c : clientList){
+                    namesList += c.getUserName() + "\n";
+                }
+            }
+            broadcast(new ChatMessage(ChatMessage.HEADER_NAMELIST, namesList));
             broadcastOne(new ChatMessage(ChatMessage.HEADER_CONFIRM), client.getName());
             //notify all that client has joined
             broadcast(new ChatMessage(ChatMessage.HEADER_WELCOME, client.getUserName()));
@@ -169,7 +174,14 @@ public class ClientHandler implements Runnable {
                 clientList.remove(client); 
             }
             System.out.println(client.getName() + " has left.");
-            broadcast(new ChatMessage(ChatMessage.HEADER_EXIT, client.getUserName()));
+            broadcast(new ChatMessage(ChatMessage.HEADER_EXIT, client.getUserName()));  
+            String namesList = "";
+            synchronized (clientList) {
+                for (ClientConnectionData c : clientList){
+                    namesList += c.getUserName() + "\n";
+                }
+            }
+            broadcast(new ChatMessage(ChatMessage.HEADER_NAMELIST, namesList));
             try {
                 client.getSocket().close();
             } catch (IOException ex) {}

@@ -61,6 +61,10 @@ public class ChatClient {
                         out.writeObject(new ChatMessage(ChatMessage.HEADER_PCHAT, message, names));
                         line = userInput.nextLine().trim();
                     }
+                } else if (line.toLowerCase().startsWith("/whoishere")) {
+                    System.out.println("List of chat members:");
+                    System.out.println(ServerListener.namesList);
+                    line = userInput.nextLine().trim();
                 } else {
                     out.writeObject(new ChatMessage(ChatMessage.HEADER_CHAT, line));
                     line = userInput.nextLine().trim();
