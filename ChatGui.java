@@ -1,5 +1,3 @@
-package ChatApp;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -41,8 +39,10 @@ public class ChatGui extends Application {
     
     private Stage stage;
     private TextArea messageArea;
+    private TextArea namesArea;
     private TextField textInput;
     private Button sendButton;
+    private Button randomButton;
     
     String namesList = "";
     ServerListener socketListener;
@@ -72,19 +72,29 @@ public class ChatGui extends Application {
         messageArea.setWrapText(true);
         messageArea.setEditable(false);
         borderPane.setCenter(messageArea);
+        messageArea.setPrefWidth(600);
+
+        namesArea = new TextArea();
+        namesArea.setWrapText(true);
+        namesArea.setEditable(false);
+        borderPane.setRight(namesArea);
+        namesArea.setPrefWidth(200);
 
         //At first, can't send messages - wait for WELCOME!
         textInput = new TextField();
         sendButton = new Button("Send");
+        randomButton = new Button("Send Random");
         textInput.setOnAction(e -> sendMessage());
         sendButton.setOnAction(e -> sendMessage());
+        randomButton.setOnAction(e -> sendRandomMessage());
+        randomButton.setDisable(true);
 
         HBox hbox = new HBox();
-        hbox.getChildren().addAll(new Label("Message: "), textInput, sendButton);
+        hbox.getChildren().addAll(new Label("Message: "), textInput, sendButton, randomButton);
         HBox.setHgrow(textInput, Priority.ALWAYS);
         borderPane.setBottom(hbox);
 
-        Scene scene = new Scene(borderPane, 400, 500);
+        Scene scene = new Scene(borderPane, 800, 500);
         stage.setTitle("Chat Client");
         stage.setScene(scene);
         stage.show();
@@ -101,6 +111,18 @@ public class ChatGui extends Application {
         });
 
         new Thread(socketListener).start();
+    }
+
+    private void sendRandomMessage() {
+        String line = textInput.getText().trim();
+        if (line.length() == 0)
+            return;
+        textInput.clear();
+        try { 
+            ArrayList<String> names = new ArrayList<String>();
+            names.add(".");
+            out.writeObject(new ChatMessage(ChatMessage.HEADER_PCHAT, line, names));
+        } catch (Exception ex) {ex.printStackTrace();}
     }
 
     private void sendMessage() {
@@ -231,6 +253,7 @@ public class ChatGui extends Application {
                             messageArea.appendText("List of chat members:\n");
                             messageArea.appendText(namesList + "\n");
                             stage.setTitle("Chat - " + incoming.getText());
+                            randomButton.setDisable(false);
                         } else if (incoming.getHeader() == ChatMessage.HEADER_WELCOME) {
                             String name = incoming.getText().trim();
                             messageArea.appendText(String.format(WelcomeMessages[rand.nextInt(WelcomeMessages.length)], name) + "\n");
@@ -249,6 +272,7 @@ public class ChatGui extends Application {
                             messageArea.appendText(String.format("\u0007%s [privately] @ %s: %s", sender, formatter.format(date), text) + "\n");
                         } else if (incoming.getHeader() == ChatMessage.HEADER_NAMELIST) {
                             namesList = incoming.getText().trim();
+                            namesArea.setText("Connected users:\n" + namesList);
                         } else {
                             messageArea.appendText("" + incoming.getHeader() + "\n");
                         }
