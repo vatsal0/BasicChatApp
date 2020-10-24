@@ -16,6 +16,7 @@ public class ChatMessage implements Serializable {
     public static final int HEADER_CHAT = 7;
     public static final int HEADER_PCHAT = 8;
     public static final int HEADER_QUIT = 9;
+    public static final int HEADER_NAMELIST = 10;
 
     private int header;
     private String sender;
