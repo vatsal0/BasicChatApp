@@ -1,8 +1,10 @@
 Compiling: 
 parent\ChatApp> javac ChatClient.java ServerListener.java ChatMessage.java
 parent\ChatApp> javac ChatServer.java ClientConnectionData.java ClientHandler.java ChatMessage.java
+parent\ChatApp> javac ChatGui.java ChatMessage.java
 
 Running:
 parent\ChatApp> cd ..
 \parent> java ChatApp.ChatServer
 \parent> java ChatApp.ChatClient
+\parent> java ChatApp.ChatGui 192.168.1.172 54321

@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 public class ServerListener implements Runnable {
     private static ObjectInputStream socketIn;
     public static int state = 0; //0: off, 1: awaiting name verification 2: active
+    public static String namesList = "";
 
     private static final String[] WelcomeMessages = {
         "%s just joined the server - glhf!",
@@ -79,6 +80,8 @@ public class ServerListener implements Runnable {
                     System.out.println("Username is already in use!. Enter another username:");
                 } else if (incoming.getHeader() == ChatMessage.HEADER_CONFIRM) {
                     state = 2;
+                    System.out.println("List of chat members:");
+                    System.out.println(ServerListener.namesList);
                 } else if (incoming.getHeader() == ChatMessage.HEADER_WELCOME) {
                     String name = incoming.getText().trim();
                     System.out.println(String.format(WelcomeMessages[rand.nextInt(WelcomeMessages.length)], name));
@@ -88,12 +91,15 @@ public class ServerListener implements Runnable {
                 } else if (incoming.getHeader() == ChatMessage.HEADER_CHAT) {
                     String text = incoming.getText().trim();
                     String sender = incoming.getSender().trim();
+                    Date date = new Date();  
                     System.out.println(String.format("%s @ %s: %s", sender, formatter.format(date), text));
                 } else if (incoming.getHeader() == ChatMessage.HEADER_PCHAT) {
                     String text = incoming.getText().trim();
                     String sender = incoming.getSender().trim();
                     Date date = new Date();  
                     System.out.println(String.format("\u0007%s [privately] @ %s: %s", sender, formatter.format(date), text));
+                } else if (incoming.getHeader() == ChatMessage.HEADER_NAMELIST) {
+                    namesList = incoming.getText().trim();
                 } else {
                     System.out.println(incoming);
                 }
