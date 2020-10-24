@@ -1,3 +1,5 @@
+package ChatApp;
+
 import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -131,7 +133,7 @@ public class ClientHandler implements Runnable {
                 }
             }
             broadcast(new ChatMessage(ChatMessage.HEADER_NAMELIST, namesList));
-            broadcastOne(new ChatMessage(ChatMessage.HEADER_CONFIRM), client.getName());
+            broadcastOne(new ChatMessage(ChatMessage.HEADER_CONFIRM, username), client.getName());
             //notify all that client has joined
             broadcast(new ChatMessage(ChatMessage.HEADER_WELCOME, client.getUserName()));
 

@@ -1,3 +1,5 @@
+package ChatApp;
+
 import java.net.Socket;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
