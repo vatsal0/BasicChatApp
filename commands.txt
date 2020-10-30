@@ -7,4 +7,4 @@ Running:
 parent\ChatApp> cd ..
 \parent> java ChatApp.ChatServer
 \parent> java ChatApp.ChatClient
-\parent> java ChatApp.ChatGui 192.168.1.172 54321
+\parent> java ChatApp.ChatGui 172.31.47.67 59013

@@ -63,7 +63,8 @@ public class ChatGui extends Application {
             serverAddress = args.get(0);
             serverPort = Integer.parseInt(args.get(1));
         } else {
-            throw new Exception("Please enter ip and port");
+            serverAddress = "ec2-13-58-169-82.us-east-2.compute.amazonaws.com";
+            serverPort = 59013;
         }
 
 

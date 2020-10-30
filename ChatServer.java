@@ -15,7 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class ChatServer {
-    public static final int PORT = 54321;
+    public static final int PORT = 59013;
 
     public static void main(String[] args) throws Exception {
         ExecutorService pool = Executors.newFixedThreadPool(100);
