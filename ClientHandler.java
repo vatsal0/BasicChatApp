@@ -129,7 +129,7 @@ public class ClientHandler implements Runnable {
             String namesList = "";
             synchronized (clientList) {
                 for (ClientConnectionData c : clientList){
-                    namesList += c.getUserName() + "\n";
+                    if (c.getUserName() != null) namesList += c.getUserName() + "\n";
                 }
             }
             broadcast(new ChatMessage(ChatMessage.HEADER_NAMELIST, namesList));
@@ -180,7 +180,7 @@ public class ClientHandler implements Runnable {
             String namesList = "";
             synchronized (clientList) {
                 for (ClientConnectionData c : clientList){
-                    namesList += c.getUserName() + "\n";
+                    if (c.getUserName() != null) namesList += c.getUserName() + "\n";
                 }
             }
             broadcast(new ChatMessage(ChatMessage.HEADER_NAMELIST, namesList));
